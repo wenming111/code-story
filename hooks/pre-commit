@@ -1,0 +1,13 @@
+#!/bin/sh
+# code-story pre-commit hook.
+# Captures the human<->AI conversation behind this commit and stages it into the commit.
+# Must never block a commit: every path exits 0.
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || exit 0
+[ -n "$ROOT" ] || exit 0
+
+PY="$(command -v python3 || command -v python)" || exit 0
+[ -n "$PY" ] || exit 0
+
+PYTHONPATH="$ROOT/src${PYTHONPATH:+:$PYTHONPATH}" "$PY" -m code_story.capture || exit 0
+exit 0

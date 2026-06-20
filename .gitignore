@@ -1,0 +1,4 @@
+.ai-context/.capture.log
+__pycache__/
+*.pyc
+.omc/
