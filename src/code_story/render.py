@@ -13,8 +13,10 @@ def _yaml_scalar(value) -> str:
     return '"' + s + '"'
 
 
-def _first_human(events: List[Event]) -> str:
-    for ev in events:
+def _last_human(events: List[Event]) -> str:
+    """Last human turn of the increment -- closer to the intent of THIS commit
+    than the first turn (which is the oldest, often unrelated, message)."""
+    for ev in reversed(events):
         if ev.role == "human" and ev.text.strip():
             line = ev.text.strip().splitlines()[0]
             return line[:200]
@@ -22,7 +24,7 @@ def _first_human(events: List[Event]) -> str:
 
 
 def build_summary(events: List[Event], staged_files: List[str]) -> str:
-    intent = _first_human(events)
+    intent = _last_human(events)
     parts = []
     if intent:
         parts.append(intent)

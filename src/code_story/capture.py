@@ -76,13 +76,20 @@ def collect_events(repo_root: str) -> List[Event]:
     events: List[Event] = []
 
     if explicit:
-        # Dogfood / override path: ingest whole files, no cwd/window filtering.
+        # Override path (dogfood): use explicit files and SKIP cwd filtering
+        # (the session's cwd may not match this repo), but STILL apply the time
+        # window so we capture only the increment since the last commit.
+        since = _last_commit_time(repo_root)
+        until = time.time()
         for path in explicit:
             if not os.path.isfile(path):
                 continue
             for adapter in ADAPTERS:
                 if adapter.can_parse(path):
-                    events.extend(adapter.parse_file(path))
+                    for ev in adapter.parse_file(path):
+                        if ev.ts and not (since <= ev.ts < until):
+                            continue
+                        events.append(ev)
                     break
         events.sort(key=lambda e: e.ts)
         return events
