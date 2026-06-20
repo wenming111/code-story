@@ -40,7 +40,10 @@ def render(events: List[Event], meta: dict) -> str:
     staged = meta.get("staged_files", [])
     anchored = meta.get("anchored", set())
     agent_steps = sum(1 for e in events if e.role == "agent")
-    summary = build_summary(events, staged)
+    # Agent-authored summary (handshake) wins; otherwise fall back to heuristic.
+    override = meta.get("summary_override")
+    summary = override if override else build_summary(events, staged)
+    summary_by = "agent" if override else "heuristic"
     created = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     lines = ["---"]
@@ -52,6 +55,7 @@ def render(events: List[Event], meta: dict) -> str:
     lines.append("branch: " + _yaml_scalar(meta.get("branch", "")))
     lines.append("created_at: " + _yaml_scalar(created))
     lines.append("summary: " + _yaml_scalar(summary))
+    lines.append("summary_by: " + _yaml_scalar(summary_by))
     if staged:
         lines.append("files:")
         for f in staged:

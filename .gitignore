@@ -1,4 +1,5 @@
 .ai-context/.capture.log
+.ai-context/.pending-summary
 __pycache__/
 *.pyc
 .omc/

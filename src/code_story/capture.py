@@ -63,6 +63,25 @@ def _last_commit_time(repo_root: str) -> float:
         return 0.0
 
 
+def _read_pending_summary(repo_root: str):
+    """Agent-path handshake: the agent writes its summary to
+    .ai-context/.pending-summary before committing. We consume (read + delete)
+    it here so it applies to exactly one commit. Returns None if absent."""
+    path = os.path.join(repo_root, AI_DIR, ".pending-summary")
+    if not os.path.isfile(path):
+        return None
+    try:
+        with open(path, "r", encoding="utf-8") as fh:
+            txt = fh.read().strip()
+    except OSError:
+        return None
+    try:
+        os.remove(path)
+    except OSError:
+        pass
+    return txt or None
+
+
 def _explicit_files() -> List[str]:
     raw = os.environ.get("CODE_STORY_SESSION_FILES", "").strip()
     if not raw:
@@ -148,6 +167,9 @@ def main() -> int:
             if rel in staged_set:
                 anchored.add(f)
 
+    pending = _read_pending_summary(repo_root)
+    summary_override = redact(pending) if pending else None
+
     meta = {
         "source": _pick(events, lambda e: e.source),
         "model": _pick(events, lambda e: e.model),
@@ -156,6 +178,7 @@ def main() -> int:
         "branch": _git(repo_root, "rev-parse", "--abbrev-ref", "HEAD") or "",
         "staged_files": staged,
         "anchored": anchored,
+        "summary_override": summary_override,
     }
 
     body = render(events, meta)
