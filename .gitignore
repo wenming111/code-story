@@ -1,5 +1,8 @@
-.ai-context/.capture.log
-.ai-context/.pending-summary
+# code-story's OWN repo does not publish captured conversations.
+# (In USER repos, .ai-context/*.md IS committed -- that's the whole point.)
+.ai-context/*
+!.ai-context/README.md
+
 __pycache__/
 *.pyc
 .omc/

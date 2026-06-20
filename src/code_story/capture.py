@@ -151,7 +151,11 @@ def main() -> int:
         return 0
 
     events = collect_events(repo_root)
-    if not events:
+    pending = _read_pending_summary(repo_root)
+    # Nothing to record if there's neither captured conversation nor an
+    # agent-authored summary (the latter supports agents without a transcript
+    # adapter yet, e.g. Cursor/Trae).
+    if not events and not pending:
         return 0
 
     # Redact every event's text before anything is written.
@@ -167,7 +171,6 @@ def main() -> int:
             if rel in staged_set:
                 anchored.add(f)
 
-    pending = _read_pending_summary(repo_root)
     summary_override = redact(pending) if pending else None
 
     meta = {

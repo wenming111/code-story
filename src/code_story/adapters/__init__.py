@@ -2,6 +2,9 @@
 
 from .claude import ClaudeAdapter
 from .codex import CodexAdapter
+from .cursor import CursorAdapter
+from .trae import TraeAdapter
 
 # Registry of all adapters. Add new sources here.
-ADAPTERS = [ClaudeAdapter(), CodexAdapter()]
+# Claude + Codex are fully implemented; Cursor + Trae are v2 stubs (SQLite).
+ADAPTERS = [ClaudeAdapter(), CodexAdapter(), CursorAdapter(), TraeAdapter()]
