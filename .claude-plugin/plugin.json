@@ -1,4 +1,5 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "code-story",
   "version": "0.1.0",
   "description": "Capture the human<->AI conversation behind each git commit and store it in-repo, so agents can later recover the 'why' behind any line of code.",

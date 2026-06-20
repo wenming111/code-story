@@ -1,0 +1,13 @@
+{
+  "name": "code-story",
+  "owner": {
+    "name": "wenming"
+  },
+  "plugins": [
+    {
+      "name": "code-story",
+      "source": "./",
+      "description": "Capture the human<->AI conversation behind each git commit, stored in-repo so agents can recover the 'why' behind code."
+    }
+  ]
+}
