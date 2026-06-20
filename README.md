@@ -80,7 +80,11 @@ Claude to write `.pending-summary` before committing):
 /plugin marketplace add <code-story-repo-url>
 /plugin install code-story
 ```
-(Capture still requires the git hook from Step 2.)
+(Capture still requires the git hook from Step 2.) The plugin also ships a
+`PreToolUse` hook that **blocks a `git commit` until you've written
+`.ai-context/.pending-summary`**, so Claude reliably authors the summary
+(`summary_by: agent`). This enforcement is Claude Code-only; other agents rely on
+the soft instruction snippets below.
 
 **Codex** — append the snippet to your repo's `AGENTS.md`:
 ```sh
