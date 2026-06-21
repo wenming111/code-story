@@ -1,0 +1,22 @@
+#!/bin/sh
+# code-story pre-commit hook (universal capture engine).
+# Works for ANY agent that runs `git commit` (Claude, Codex, Cursor, Trae) and
+# for manual/CI commits. Captures the human<->AI conversation behind this commit
+# and stages it into the commit. Must never block a commit: every path exits 0.
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || exit 0
+[ -n "$ROOT" ] || exit 0
+
+# Per-repo opt-in: only act in repos that have been enabled (have .ai-context/).
+[ -d "$ROOT/.ai-context" ] || exit 0
+
+# Self-locate the engine relative to THIS hook file, so a single code-story
+# install can serve many repos via core.hooksPath.
+HOOK_DIR="$(cd "$(dirname "$0")" && pwd 2>/dev/null)" || exit 0
+ENGINE_SRC="$HOOK_DIR/../src"
+
+PY="$(command -v python3 || command -v python)" || exit 0
+[ -n "$PY" ] || exit 0
+
+PYTHONPATH="$ENGINE_SRC${PYTHONPATH:+:$PYTHONPATH}" "$PY" -m code_story.capture || exit 0
+exit 0

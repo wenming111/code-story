@@ -1,0 +1,12 @@
+# code-story dogfoods itself: its own .ai-context/*.md captures ARE tracked,
+# so this repo's dev conversations are available for iterating the plugin.
+# (Keep this repo on a trusted/internal remote; do a clean export for any
+# public release.)
+
+# Transient handshake / log files -- never committed.
+.ai-context/.pending-summary
+.ai-context/.capture.log
+
+__pycache__/
+*.pyc
+.omc/

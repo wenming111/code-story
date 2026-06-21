@@ -1,0 +1,27 @@
+{
+  "name": "code-story",
+  "version": "0.1.0",
+  "description": "Capture the human<->AI conversation behind each git commit and store it in-repo, so agents can recover the 'why' behind code.",
+  "bin": {
+    "code-story": "bin/code-story.js"
+  },
+  "files": [
+    "bin/",
+    "hooks/",
+    "src/",
+    "skills/",
+    "integrations/",
+    ".claude-plugin/",
+    "install.sh",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=14"
+  },
+  "os": [
+    "darwin",
+    "linux"
+  ],
+  "keywords": ["git", "hooks", "git-hooks", "commit", "ai", "agent", "knowledge-base", "claude", "codex"],
+  "license": "MIT"
+}
